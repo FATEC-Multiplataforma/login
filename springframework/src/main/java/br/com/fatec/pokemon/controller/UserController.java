@@ -11,7 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/fretec")
+@RequestMapping("/fretec/v1")
 public class UserController {
     private final UserRepository repository;
     private final TokenSecurity tokenSecurity;

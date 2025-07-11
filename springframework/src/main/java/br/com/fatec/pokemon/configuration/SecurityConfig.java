@@ -45,10 +45,10 @@ public class SecurityConfig {
                         SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/fretec/auth/forget/**",
-                                "/fretec/auth/login/**")
+                                "/fretec/v1/auth/forget/**",
+                                "/fretec/v1/auth/login/**")
                         .permitAll()
-                        .requestMatchers("/fretec/auth/save/**")
+                        .requestMatchers("/fretec/v1/auth/save/**")
                         .hasRole("ADMIN").anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
