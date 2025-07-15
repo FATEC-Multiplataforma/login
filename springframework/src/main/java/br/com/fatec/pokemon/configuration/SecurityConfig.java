@@ -45,6 +45,9 @@ public class SecurityConfig {
                         SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
+                                "/swagger-ui/**",
+                                 "/v3/api-docs/**",
+                                 "/swagger-ui.html",
                                 "/fretec/v1/auth/forget/**",
                                 "/fretec/v1/auth/login/**")
                         .permitAll()
