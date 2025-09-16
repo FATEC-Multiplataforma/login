@@ -7,8 +7,6 @@ EXPOSE 8081
 
 RUN wget -O dd-java-agent.jar 'https://dtdg.co/latest-java-tracer'
 
-ARG JAR_FILE=springframework/target/*.jar
-
 COPY springframework/target/*.jar app.jar
 
-ENTRYPOINT java -jar $JAVA_OPTS app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
