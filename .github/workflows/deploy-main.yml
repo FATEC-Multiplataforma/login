@@ -2,8 +2,9 @@ name: Fretec Deploy
 
 on:
   push:
-    branch:
+    branches:
       - main
+      - develop
 
 jobs:
   deploy:
