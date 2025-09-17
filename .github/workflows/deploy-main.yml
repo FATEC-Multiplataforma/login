@@ -21,10 +21,10 @@ jobs:
           java-version: 17
 
       - name: Download Wrapper
-        uses: mvn -N io.takari:maven:wrapper -Dmaven=3.9.9
+        run: mvn -N io.takari:maven:wrapper -Dmaven=3.9.9
 
       - name: Build Projeto
-        uses: mvn clean install -Dmaven.test.skip
+        run: mvn clean install -Dmaven.test.skip
 
       - name: Dockerhub Integration
         uses: docker/login-action@v2
@@ -33,7 +33,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Imagem
-        uses: docker build -t mrspock182/login:latest .
+        run: docker build -t mrspock182/login:latest .
 
       - name: Deploy Dockerhub
-        uses: docker push mrspock182/login:latest
+        run: docker push mrspock182/login:latest
