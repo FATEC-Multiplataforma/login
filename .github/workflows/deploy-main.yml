@@ -20,11 +20,11 @@ jobs:
           distribution: 'temurin'
           java-version: 17
 
-      - name: SonarCloud Setup
-        uses: SonarSource/sonarcloud-github-action@v2
-        with:
-          organization: FATEC-Multiplataforma
-          token: ${{ secrets.SONAR_TOKEN }}
+#      - name: SonarCloud Setup
+#        uses: SonarSource/sonarcloud-github-action@v2
+#        with:
+#          organization: FATEC-Multiplataforma
+#          token: ${{ secrets.SONAR_TOKEN }}
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
