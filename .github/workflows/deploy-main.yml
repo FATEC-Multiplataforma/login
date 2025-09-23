@@ -20,13 +20,19 @@ jobs:
           java-version: 17
 
       - name: Verificar vulnerabilidades com OWASP
-        run: mvn org.owasp:dependency-check-maven:check -DfailBuildOnCVSS=7
+        run: mvn org.owasp:dependency-check-maven:check \
+          -DfailBuildOnCVSS=7 \
+          -Dformat=ALL \
+          -Danalyzer.ossindex.enabled=false
 
-      - name: Upload relatório OWASP
+      - name: Upload relatórios OWASP
         uses: actions/upload-artifact@v3
         with:
-          name: relatorio-dependencias
-          path: target/dependency-check-report.html
+          name: relatorios-dependencias
+          path: |
+            login/domain/target/dependency-check-report.html
+            login/springframework/target/dependency-check-report.html
+
 
 #  quality:
 #    name: Quality
