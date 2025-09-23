@@ -45,7 +45,7 @@ jobs:
         run: mvn clean verify
 
       - name: List generated files
-        run: ls -l target/site/jacoco/
+        run: ls -l target/jacoco-report/
 
       - name: SonarCloud Scan
         env:
@@ -57,7 +57,7 @@ jobs:
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.branch.name=main \
-            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/jacoco-report/jacoco.xml
 
 #      - name: Check SonarQube results
 #        run: |

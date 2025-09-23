@@ -122,10 +122,17 @@
                     </execution>
                     <execution>
                         <id>jacoco-site</id>
-                        <phase>package</phase>
+                        <phase>verify</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/jacoco-report</outputDirectory>
+                            <reports>
+                                <xml enabled="true" />
+                                <html enabled="true" />
+                            </reports>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
