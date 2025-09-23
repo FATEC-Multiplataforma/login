@@ -32,6 +32,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
+            mvn sonar:sonar
             -Dsonar.projectKey=FATEC-Multiplataforma_login
             -Dsonar.organization=FATEC-Multiplataforma
             -Dsonar.host.url=https://sonarcloud.io
