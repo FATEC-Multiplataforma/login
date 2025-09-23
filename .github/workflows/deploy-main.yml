@@ -27,16 +27,11 @@ jobs:
 #          token: ${{ secrets.SONAR_TOKEN }}
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            mvn sonar:sonar
-            -Dsonar.projectKey=FATEC-Multiplataforma_login
-            -Dsonar.organization=FATEC-Multiplataforma
-            -Dsonar.host.url=https://sonarcloud.io
-            -Dmaven.test.skip=true
+        run: mvn sonar:sonar -Dsonar.projectKey=FATEC-Multiplataforma_login \
+          -Dsonar.organization=FATEC-Multiplataforma \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -Dmaven.test.skip=true
 
 #      - name: SonarCloud Setup
 #        uses: SonarSource/sonarcloud-github-action@v2
