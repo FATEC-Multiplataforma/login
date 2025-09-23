@@ -12,12 +12,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/maven@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Setup Java
+        uses: actions/setup-java@v2
         with:
-          args: --severity-threshold=high
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Verificar vulnerabilidades com OWASP
+        run: mvn org.owasp:dependency-check-maven:check -DfailBuildOnCVSS=7
+
+      - name: Upload relatório OWASP
+        uses: actions/upload-artifact@v3
+        with:
+          name: relatorio-dependencias
+          path: target/dependency-check-report.html
 
 #  quality:
 #    name: Quality
