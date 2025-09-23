@@ -20,13 +20,18 @@ jobs:
           distribution: 'temurin'
           java-version: 17
 
-      - name: Sonar Code Analysis
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: https://sonarcloud.io
-        run: |
-          mvn clean verify sonar:sonar \
-            -Dsonar.projectKey=FATEC-Multiplataforma_login
+      - name: SonarCloud Setup
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          organization: FATEC-Multiplataforma
+          token: ${{ secrets.Fretec }}
+
+      - name: SonarCloud Scan
+        run: mvn sonar:sonar -Dsonar.projectKey=FATEC-Multiplataforma_login \
+          -Dsonar.organization=FATEC-Multiplataforma \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.login=${{ secrets.Fretec }} \
+          -Dmaven.test.skip=true
 
 #      - name: SonarCloud Setup
 #        uses: SonarSource/sonarcloud-github-action@v2
