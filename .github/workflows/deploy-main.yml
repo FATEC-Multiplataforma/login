@@ -20,17 +20,25 @@ jobs:
           distribution: 'temurin'
           java-version: 17
 
-      - name: SonarCloud Setup
-        uses: SonarSource/sonarcloud-github-action@v2
-        with:
-          organization: mrspock182
-          token: ${{ secrets.SONAR_TOKEN }}
+      - name: Sonar Code Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
+        run: |
+          mvn clean verify sonar:sonar \
+            -Dsonar.projectKey=FATEC-Multiplataforma_login
 
-      - name: SonarCloud Scan
-        run: mvn verify sonar:sonar -Dsonar.projectKey=mrspock182_FATEC-Multiplataforma_login \
-          -Dsonar.organization=mrspock182 \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+#      - name: SonarCloud Setup
+#        uses: SonarSource/sonarcloud-github-action@v2
+#        with:
+#          organization: mrspock182
+#          token: ${{ secrets.SONAR_TOKEN }}
+#
+#      - name: SonarCloud Scan
+#        run: mvn verify sonar:sonar -Dsonar.projectKey=mrspock182_FATEC-Multiplataforma_login \
+#          -Dsonar.organization=mrspock182 \
+#          -Dsonar.host.url=https://sonarcloud.io \
+#          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
 
 #      - name: Download Wrapper
