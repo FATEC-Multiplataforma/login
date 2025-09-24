@@ -78,17 +78,6 @@ jobs:
       - name: List generated files (for debugging)
         run: ls -l springframework/target/jacoco-report/
 
-      - name: SonarCloud Scan
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          mvn sonar:sonar \
-            -Dsonar.projectKey=fatec-multiplataforma_login \
-            -Dsonar.organization=fatec-multiplataforma \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
-            -Dsonar.coverage.jacoco.xmlReportPaths=springframework/target/jacoco-report/jacoco.xml
-
       - name: Check SonarQube results
         run: |
           SONAR_URL="https://sonarcloud.io/api/measures/component?componentKey=fatec-multiplataforma_login&branch=main"
