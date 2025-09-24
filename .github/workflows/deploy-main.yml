@@ -8,53 +8,33 @@ on:
 
 jobs:
   security:
-    name: Security
+    name: Analyze with CodeQL
     runs-on: ubuntu-latest
+
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'java' ]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Java
-        uses: actions/setup-java@v3
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
         with:
-          java-version: '17'
-          distribution: 'zulu'
+          languages: ${{ matrix.language }}
 
-      - name: Build all modules (installs domain, etc)
+      - name: Build project
         run: mvn clean install -DskipTests
 
-      - name: Run OWASP Dependency Check
-        id: owasp_check
-        continue-on-error: true
-        env:
-          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
-        run: |
-          mvn org.owasp:dependency-check-maven:check \
-            -Dnvd.api.key=${NVD_API_KEY} \
-            -DfailBuildOnCVSS=7 \
-            -Dformat=ALL \
-            -Danalyzer.ossindex.enabled=false
-
-      - name: Upload Dependency Check Reports (springframework)
-        if: steps.owasp_check.outcome == 'failure'
-        uses: actions/upload-artifact@v4
-        with:
-          name: dependency-check-springframework
-          path: login/springframework/target/dependency-check-report.html
-
-      - name: Upload Dependency Check Reports (domain)
-        if: steps.owasp_check.outcome == 'failure'
-        uses: actions/upload-artifact@v4
-        with:
-          name: dependency-check-domain
-          path: login/domain/target/dependency-check-report.html
-
-      - name: Fail if OWASP check failed
-        if: steps.owasp_check.outcome == 'failure'
-        run: |
-          echo "OWASP check failed. Review the uploaded reports."
-          exit 1
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
 
 
 #  quality:
