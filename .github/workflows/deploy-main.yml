@@ -71,7 +71,7 @@ jobs:
         run: |
           mvn sonar:sonar \
             -Dsonar.projectKey=FATEC-Multiplataforma_login \
-            -Dsonar.organization=FATEC-Multiplataforma \
+            -Dsonar.organization=fatec-multiplataforma  \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
