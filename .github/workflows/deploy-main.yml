@@ -29,7 +29,9 @@ jobs:
           mvn org.owasp:dependency-check-maven:check \
             -DfailBuildOnCVSS=7 \
             -Dformat=ALL \
-            -Danalyzer.ossindex.enabled=false
+            -Danalyzer.ossindex.enabled=false \
+            -Dcve.url.modified=https://github.com/jeremylong/DependencyCheck/raw/main/data/nvdcve-1.1-modified.json.gz \
+            -Dcve.url.base=https://github.com/jeremylong/DependencyCheck/raw/main/data/nvdcve-1.1-%.json.gz
 
       - name: Upload relatório do módulo domain (se falhar)
         if: failure()
