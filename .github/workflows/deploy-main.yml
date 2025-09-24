@@ -10,6 +10,9 @@ jobs:
   security:
     name: Security
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: login
 
     steps:
       - name: Checkout repository
@@ -20,6 +23,9 @@ jobs:
         with:
           java-version: '17'
           distribution: 'zulu'
+
+      - name: Build all modules (installs domain, etc)
+        run: mvn clean install -DskipTests
 
       - name: Run OWASP Dependency Check
         id: owasp_check
