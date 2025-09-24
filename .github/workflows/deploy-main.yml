@@ -10,43 +10,48 @@ jobs:
   security:
     name: Security
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: login
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Setup Java
-        uses: actions/setup-java@v2
+      - name: Set up Java
+        uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: 17
+          java-version: '17'
+          distribution: 'zulu'
 
-      - name: Instalar dependências
-        run: mvn install -Dmaven.test.skip=true
-
-      - name: Rodar OWASP Dependency-Check
+      - name: Run OWASP Dependency Check
+        id: owasp_check
         continue-on-error: true
         run: |
-          cd login/springframework
           mvn org.owasp:dependency-check-maven:check \
             -DfailBuildOnCVSS=7 \
             -Dformat=ALL \
-            -Danalyzer.ossindex.enabled=false || echo "OWASP scan failed" > owasp-failure.flag
+            -Danalyzer.ossindex.enabled=false
 
-      - name: Upload relatório se houver vulnerabilidades
-        if: always()
+      - name: Upload Dependency Check Reports (springframework)
+        if: steps.owasp_check.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
-          name: relatorio-springframework
-          path: |
-            login/springframework/target/dependency-check-report.*
-            login/springframework/owasp-failure.flag
+          name: dependency-check-springframework
+          path: login/springframework/target/dependency-check-report.html
 
-      - name: Falhar o job se houver vulnerabilidades
-        if: always()
+      - name: Upload Dependency Check Reports (domain)
+        if: steps.owasp_check.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-domain
+          path: login/domain/target/dependency-check-report.html
+
+      - name: Fail if OWASP check failed
+        if: steps.owasp_check.outcome == 'failure'
         run: |
-          if [ -f login/springframework/owasp-failure.flag ]; then
-            echo "Vulnerabilidades encontradas. Falhando o job."
-            exit 1
-          fi
+          echo "OWASP check failed. Review the uploaded reports."
+          exit 1
 
 
 #  quality:
