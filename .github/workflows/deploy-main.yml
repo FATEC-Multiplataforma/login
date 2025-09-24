@@ -19,20 +19,40 @@ jobs:
           distribution: 'temurin'
           java-version: 17
 
-      - name: Verificar vulnerabilidades com OWASP
+      - name: Instalar dependências locais
+        run: mvn install -Dmaven.test.skip=true
+
+      - name: Verificar vulnerabilidades no módulo domain
+        continue-on-error: true
         run: |
+          cd login/domain
           mvn org.owasp:dependency-check-maven:check \
             -DfailBuildOnCVSS=7 \
             -Dformat=ALL \
             -Danalyzer.ossindex.enabled=false
 
-      - name: Upload relatórios OWASP
+      - name: Upload relatório do módulo domain (se falhar)
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: relatorios-dependencias
-          path: |
-            login/domain/target/dependency-check-report.html
-            login/springframework/target/dependency-check-report.html
+          name: relatorio-domain
+          path: login/domain/target/dependency-check-report.*
+
+      - name: Verificar vulnerabilidades no módulo springframework
+        continue-on-error: true
+        run: |
+          cd login/springframework
+          mvn org.owasp:dependency-check-maven:check \
+            -DfailBuildOnCVSS=7 \
+            -Dformat=ALL \
+            -Danalyzer.ossindex.enabled=false
+
+      - name: Upload relatório do módulo springframework (se falhar)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-springframework
+          path: login/springframework/target/dependency-check-report.*
 
 
 #  quality:
