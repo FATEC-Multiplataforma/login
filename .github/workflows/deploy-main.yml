@@ -114,33 +114,32 @@ jobs:
             exit 1
           fi
 
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Verificar Versao
-        uses: actions/checkout@v5
-
-      - name: Setup Java
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'temurin'
-          java-version: 17
-
-      - name: Download Wrapper
-        run: mvn -N io.takari:maven:wrapper -Dmaven=3.9.9
-
-      - name: Build Projeto
-        run: mvn clean install -Dmaven.test.skip
-
-      - name: Dockerhub Integration
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build Imagem
-        run: docker build -t mrspock182/login:latest .
-
-      - name: Deploy Dockerhub
-        run: docker push mrspock182/login:latest
+#  deploy:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Verificar Versao
+#        uses: actions/checkout@v5
+#
+#      - name: Setup Java
+#        uses: actions/setup-java@v2
+#        with:
+#          distribution: 'temurin'
+#          java-version: 17
+#
+#      - name: Download Wrapper
+#        run: mvn -N io.takari:maven:wrapper -Dmaven=3.9.9
+#
+#      - name: Build Projeto
+#        run: mvn clean install -Dmaven.test.skip
+#
+#      - name: Dockerhub Integration
+#        uses: docker/login-action@v2
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#
+#      - name: Build Imagem
+#        run: docker build -t mrspock182/login:latest .
+#
+#      - name: Deploy Dockerhub
+#        run: docker push mrspock182/login:latest
