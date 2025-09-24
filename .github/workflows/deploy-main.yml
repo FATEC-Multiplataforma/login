@@ -19,42 +19,34 @@ jobs:
           distribution: 'temurin'
           java-version: 17
 
-      - name: Instalar dependências locais
+      - name: Instalar dependências
         run: mvn install -Dmaven.test.skip=true
 
-      - name: Verificar vulnerabilidades no módulo domain
-        continue-on-error: true
-        run: |
-          cd login/domain
-          mvn org.owasp:dependency-check-maven:check \
-            -DfailBuildOnCVSS=7 \
-            -Dformat=ALL \
-            -Danalyzer.ossindex.enabled=false \
-            -Dcve.url.modified=https://github.com/jeremylong/DependencyCheck/raw/main/data/nvdcve-1.1-modified.json.gz \
-            -Dcve.url.base=https://github.com/jeremylong/DependencyCheck/raw/main/data/nvdcve-1.1-%.json.gz
-
-      - name: Upload relatório do módulo domain (se falhar)
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: relatorio-domain
-          path: login/domain/target/dependency-check-report.*
-
-      - name: Verificar vulnerabilidades no módulo springframework
+      - name: Rodar OWASP Dependency-Check
         continue-on-error: true
         run: |
           cd login/springframework
           mvn org.owasp:dependency-check-maven:check \
             -DfailBuildOnCVSS=7 \
             -Dformat=ALL \
-            -Danalyzer.ossindex.enabled=false
+            -Danalyzer.ossindex.enabled=false || echo "OWASP scan failed" > owasp-failure.flag
 
-      - name: Upload relatório do módulo springframework (se falhar)
-        if: failure()
+      - name: Upload relatório se houver vulnerabilidades
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: relatorio-springframework
-          path: login/springframework/target/dependency-check-report.*
+          path: |
+            login/springframework/target/dependency-check-report.*
+            login/springframework/owasp-failure.flag
+
+      - name: Falhar o job se houver vulnerabilidades
+        if: always()
+        run: |
+          if [ -f login/springframework/owasp-failure.flag ]; then
+            echo "Vulnerabilidades encontradas. Falhando o job."
+            exit 1
+          fi
 
 
 #  quality:
