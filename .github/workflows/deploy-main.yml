@@ -25,7 +25,11 @@ jobs:
         run: mvn clean install -DskipTests
 
       - name: Install Trivy
-        uses: aquasecurity/trivy-action@master
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget rpm
+          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.50.4_Linux-64bit.deb
+          sudo dpkg -i trivy_0.50.4_Linux-64bit.deb
 
       - name: Scan for vulnerabilities in dependencies (Maven)
         run: |
