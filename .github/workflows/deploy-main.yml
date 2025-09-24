@@ -46,6 +46,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -53,7 +55,7 @@ jobs:
           java-version: '17'
           distribution: 'zulu'
 
-      - name: Cache Maven dependencies
+      - name: Cache Maven packages
         uses: actions/cache@v3
         with:
           path: ~/.m2/repository
@@ -62,6 +64,9 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean verify
+
+      - name: List generated files
+        run: ls -l target/jacoco-report/
 
       - name: SonarCloud Scan
         env:
