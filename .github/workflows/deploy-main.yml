@@ -65,20 +65,20 @@ jobs:
       - name: Build with Maven
         run: mvn clean verify
 
-      - name: List generated files
-        run: ls -l target/jacoco-report/
+      - name: List generated files (for debugging)
+        run: ls -l springframework/target/jacoco-report/
 
       - name: SonarCloud Scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn clean verify sonar:sonar \
+          mvn sonar:sonar \
             -Dsonar.projectKey=FATEC-Multiplataforma_login \
             -Dsonar.organization=FATEC-Multiplataforma \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.branch.name=main \
-            -Dsonar.coverage.jacoco.xmlReportPaths=target/jacoco-report/jacoco.xml
+            -Dsonar.coverage.jacoco.xmlReportPaths=springframework/target/jacoco-report/jacoco.xml
 
 #      - name: Check SonarQube results
 #        run: |
