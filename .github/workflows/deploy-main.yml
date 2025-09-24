@@ -10,9 +10,6 @@ jobs:
   security:
     name: Security
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: login
 
     steps:
       - name: Checkout repository
